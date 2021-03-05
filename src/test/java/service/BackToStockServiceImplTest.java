@@ -129,6 +129,27 @@ class BackToStockServiceImplTest {
     }
 
     @Test
+    void notifyProductAddedToStock_WhenNoPremiumUsers_ThenFifoOrder() {
+        User sergeyNonPremium = new User("Sergey", false, 22);
+        User randomUserNonPremium = new User("User", false, 45);
+
+        Product medicalProduct = new Product("solpadein", ProductCategory.MEDICAL);
+
+        stockService.subscribe(sergeyNonPremium, medicalProduct);
+        stockService.subscribe(randomUserNonPremium, medicalProduct);
+
+        stockService.notifyProductAddedToStock(medicalProduct);
+        stockService.notifyProductAddedToStock(medicalProduct);
+
+        Mockito.verify(notifierService, times(2))
+                .notifyUser(userCapture.capture(), productCapture.capture());
+
+        assertThat(userCapture.getAllValues())
+                .hasSize(2)
+                .containsExactly(sergeyNonPremium, randomUserNonPremium);
+    }
+
+    @Test
     void notifyProductAddedToStock_WhenNoUser_NotifyNotCalled() {
 
         Product medicalProduct = new Product("solpadein", ProductCategory.MEDICAL);

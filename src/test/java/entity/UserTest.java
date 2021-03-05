@@ -1,6 +1,7 @@
 package entity;
 
 import com.example.entity.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,6 +18,8 @@ public class UserTest {
         assertThat(user.getName()).isEqualTo(name);
         assertThat(user.getAge()).isEqualTo(age);
         assertThat(user.isPremium()).isEqualTo(premium);
+
+
     }
 
 }
